@@ -1,0 +1,44 @@
+version: '3'
+services:
+  node-server:
+    container_name: node_server
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    restart: always
+    command: ["npx", "nodemon", "-L", "index.js"]
+    volumes:
+      - .:/usr/src/app
+    environment:
+      DOCUMENT_ROOT: /usr/src/app
+      ENVIRONMENT: dev
+  db:
+    image: mysql:latest
+    container_name: db
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root 
+      MYSQL_DATABASE: tutorial 
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data_test:/var/lib/mysql
+    restart: always
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: db 
+      PMA_PORT: 3306 
+      PMA_USER: root 
+      PMA_PASSWORD: root
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+volumes:
+  mysql_data_test:
+    driver: local
