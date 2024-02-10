@@ -4,6 +4,7 @@ const { initMySQL } = require('./config/connectDB')
 const UserRouter = require('./routers/users')
 
 const app = express();
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.json('hello world');

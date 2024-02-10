@@ -4,8 +4,10 @@ const router = express.Router()
 const userController  = require('../controller/users')
 
 
-router.get('/user-db', userController.getConnectDabase)
+router.get('/user-all', userController.getUsersAll)
 router.get('/user-byid/:id', userController.getUsersById)
+router.post('/user-create', userController.createUsers)
+
 
 
 

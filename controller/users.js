@@ -3,7 +3,7 @@ const { initMySQL } = require('../config/connectDB');
 
 
 module.exports = {
-    getConnectDabase: async (req, res) => {
+    getUsersAll: async (req, res) => {
             try {
                 const conn = await initMySQL();
                 const [results] = await conn.query('SELECT * FROM users');
@@ -24,5 +24,23 @@ module.exports = {
             console.error('Failed to query the database:', error);
             res.status(500).send('Internal Server Error');
         }
+    },
+
+    createUsers: async (req, res) => {
+        try {
+            const {
+                name
+            } = req.body
+            // console.log(name);
+            const conn = await initMySQL();
+            const result = await conn.execute('INSERT INTO users (full_name) VALUES (?)', [name]);
+            await conn.end();
+            res.status(201).json({ message: `User ${name} created successfully`, result: result });
+
+        } catch (error) {
+            console.error('Failed to query the database:', error);
+            res.status(500).send('Internal Server Error');
+        }
+
     },
 };
